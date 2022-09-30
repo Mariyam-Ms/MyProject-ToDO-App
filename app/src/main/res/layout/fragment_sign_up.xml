@@ -63,7 +63,7 @@
         android:paddingStart="12dp"
         android:hint="Enter Your Email"
         android:background="@null"
-        android:inputType="textEmailAddress||textNoSuggestions"/>
+        android:inputType="textEmailAddress"/>
 
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
@@ -78,14 +78,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/navydesign">
 
-        <EditText
+
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            app:passwordToggleEnabled="true" />
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passSignup"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:paddingStart="12dp"
             android:hint="Enter Password"
-            app:layout_constraintTop_toBottomOf="@id/emailSignup"
+            android:layout_marginStart="5dp"
+            android:inputType="textPassword"
             android:background="@null" />
+
+
+
+      <!--  <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/passwordsignupimage"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="300dp"
+            android:paddingStart="12dp"
+            android:src="@drawable/ic_baseline_remove_red_eye_24"
+            android:background="@null" />-->
 
     </androidx.cardview.widget.CardView>
 
@@ -105,17 +123,20 @@
         app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/navydesign">
+        <com.google.android.material.textfield.TextInputLayout
 
-        <EditText
-        android:id="@+id/ConfirmpassSignup"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:paddingStart="12dp"
-        android:hint="Conform Password"
-        app:layout_constraintTop_toBottomOf="@id/emailSignup"
-        android:background="@null" />
-
-</androidx.cardview.widget.CardView>
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            app:passwordToggleEnabled="true" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ConfirmpassSignup"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="@string/confirm_password"
+            android:layout_marginStart="5dp"
+            android:inputType="textPassword"
+            android:background="@null" />
+    </androidx.cardview.widget.CardView>
 
 
 
@@ -130,15 +151,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:hint="Type Username"
-        app:layout_constraintTop_toBottomOf="@id/card3"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        />
+
 
     <ImageView
         android:id="@+id/nextBtn"

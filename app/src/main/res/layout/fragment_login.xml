@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.LoginFragment">
+
     <ImageView
         android:id="@+id/navydesignl"
         android:layout_width="wrap_content"
@@ -15,6 +16,20 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="@string/log_in"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/navydesignl"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="40dp"
+        />
 
     <ImageView
         android:id="@+id/imageViewl"
@@ -36,30 +51,31 @@
         android:scaleType="fitXY"
         android:src="@drawable/design_two"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageViewl" />
+
+
     <androidx.cardview.widget.CardView
         android:id="@+id/card1l"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="18dp"
-        app:cardElevation="12dp"
         app:cardCornerRadius="10dp"
+        app:cardElevation="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/navydesignl">
 
         <EditText
-            android:id="@+id/Usernamel"
+            android:id="@+id/emaill"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:background="@null"
+            android:hint="@string/enter_email"
             android:paddingStart="12dp"
-            android:hint="Enter Username.."
-            app:layout_constraintTop_toBottomOf="@id/navydesignl"
-            android:background="@null" />
+            app:layout_constraintTop_toBottomOf="@id/navydesignl" />
 
     </androidx.cardview.widget.CardView>
 
@@ -67,60 +83,57 @@
         android:id="@+id/card2l"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="28dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="18dp"
-        app:cardElevation="12dp"
-        app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card1l">
 
-        <EditText
-            android:id="@+id/emaill"
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/passwordlimage"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginStart="300dp"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            android:paddingStart="12dp"
+            android:src="@drawable/ic_baseline_remove_red_eye_24"
+            app:layout_constraintTop_toBottomOf="@id/emaill" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:paddingStart="12dp"
-            android:hint="Enter Email "
-            app:layout_constraintTop_toBottomOf="@id/Usernamel"
-            android:background="@null" />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card3l"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="18dp"
-        app:cardElevation="12dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card2l">
-
-        <EditText
+            app:passwordToggleEnabled="true" />
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordl"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:paddingStart="12dp"
-            android:hint="Enter Password "
-            app:layout_constraintTop_toBottomOf="@id/emaill"
+            android:hint="Enter Password"
+            android:layout_marginStart="5dp"
+            android:inputType="textPassword"
             android:background="@null" />
+
 
     </androidx.cardview.widget.CardView>
 
     <Button
+        android:id="@+id/loginbt"
         android:layout_width="wrap_content"
         android:layout_height="40sp"
         android:layout_marginTop="32dp"
         android:background="@drawable/shape_2"
-        android:text="Sign in"
+        android:text="Log in"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card3l" />
+        app:layout_constraintTop_toBottomOf="@id/card2l" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

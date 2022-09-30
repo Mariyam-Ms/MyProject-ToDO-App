@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.HomeFragment">
 
     <ImageView
@@ -13,21 +13,46 @@
         android:scaleType="fitXY"
         android:src="@drawable/design_one"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/profileinHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/ic_baseline_person_24"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/addtask"
+        android:layout_width="44dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.887"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/navydesignh" />
+
     <ImageView
         android:id="@+id/imageViewh"
-        android:layout_width="80dp"
-        android:layout_height="105dp"
-        android:layout_marginStart="4dp"
+        android:layout_width="110dp"
+        android:layout_height="125dp"
         android:scaleType="fitXY"
         android:src="@drawable/half_circle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/downimage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/navydesignh"
-        app:layout_constraintVertical_bias="0.311" />
+        app:layout_constraintVertical_bias="0.405" />
+
     <ImageView
+        android:id="@+id/downimage"
 
         android:layout_width="wrap_content"
         android:layout_height="180dp"
@@ -38,8 +63,17 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Notes"
+        android:layout_width="0dp"
+        android:layout_height="224dp"
+        android:layout_marginTop="-42dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navydesignh"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
