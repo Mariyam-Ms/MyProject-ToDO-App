@@ -4,5 +4,5 @@
 ![signup](https://user-images.githubusercontent.com/112877766/190848672-fb1b7f40-8ef3-433c-8360-a1210d11b941.png)
 ![login](https://user-images.githubusercontent.com/112877766/190848678-0fc22865-9cf8-47d8-bb98-932e0d674494.png)
 ![Group 6](https://user-images.githubusercontent.com/112877766/190848680-fb6fd919-81ca-4f79-acef-159d73ac0f82.png)
-![Android Large - 1](https://user-images.githubusercontent.com/112877766/190848682-b334e769-b1da-44b3-a6d8-e2ff6ea93b49.png)
+
 ![Profile_Screen](https://user-images.githubusercontent.com/112877766/190848684-f54f3c69-e9fb-429f-9432-5231a2d0da6a.png)
