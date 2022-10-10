@@ -9,6 +9,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.project1.todo.R;
 import com.project1.todo.databinding.FragmentHomeBinding;
 import com.project1.todo.utilsRecycle.DataClass;
 import com.project1.todo.utilsRecycle.TODOAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +43,7 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
     private FirebaseAuth auth;
     private NavController navController;
     private DatabaseReference databaseReference;
+    private  StorageReference storageReference;
     private PopupDialogFragment popup;
     private List<DataClass> tododatalist;
     private TODOAdapter todoAdapter;
@@ -61,18 +66,22 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
         tododatalist = new ArrayList<>();
         auth = FirebaseAuth.getInstance();
         navController = Navigation.findNavController(view);
-        databaseReference= FirebaseDatabase.getInstance().getReference().child(auth.getCurrentUser().getUid());
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("").child(auth.getCurrentUser().getUid());
+        storageReference = FirebaseStorage.getInstance().getReference("Images");
+        getProfilePic();
         binding.Notes.setHasFixedSize(true);
         binding.Notes.setLayoutManager(new LinearLayoutManager(getContext()));
 
         getTaskfromRDb();
 
+
         binding.profileinHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.action_homeFragment_to_profileFragment2);
-            }
-        });
+
+            }});
+
         binding.addtask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +95,24 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
         });
 
     }
+
+    private void getProfilePic() {
+        databaseReference.child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String urlImage = snapshot.child("profilePic").getValue(String.class);
+                Picasso.get().load(urlImage).into(binding.profileinHome);
+              //  Log.d("TAG", "onDataChange: "+urlImage);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "There is Trouble in retriving", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
 
     private void getTaskfromRDb() {
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -101,6 +128,7 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
 
                     tododatalist.add(todotask);
                 }
+                Log.d(TAG, "onDataChange: "+tododatalist);
                 todoAdapter.setTodolist(tododatalist);
                 binding.Notes.setAdapter(todoAdapter);
                 todoAdapter.notifyDataSetChanged();

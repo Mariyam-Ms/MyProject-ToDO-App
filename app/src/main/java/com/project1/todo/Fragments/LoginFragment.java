@@ -42,6 +42,13 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.signUpTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.action_loginFragment_to_signUpFragment);
+            }
+        });
         auth = FirebaseAuth.getInstance();
         navController = Navigation.findNavController(view);
         binding.loginbt.setOnClickListener(new View.OnClickListener() {

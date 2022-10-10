@@ -39,6 +39,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.TODOViewholder
         binding.EditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 taskclick.Edittask(todotask);
             }
         });

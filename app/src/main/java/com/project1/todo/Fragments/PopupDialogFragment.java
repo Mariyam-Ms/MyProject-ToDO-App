@@ -40,7 +40,7 @@ public class PopupDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (getArguments()!=null){
-            String updatetask = getArguments().getString("todo");
+            String updatetask = getArguments().getString("task");
             taskid = getArguments().getString("taskid");
             binding.Tasktodo.setText(updatetask);
         }

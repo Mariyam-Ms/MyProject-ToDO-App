@@ -44,11 +44,11 @@ public class SplashScreenFragment extends Fragment {
             @Override
             public void run() {
                 if (auth.getCurrentUser() != null){
-                    navController.navigate(R.id.action_splashScreenFragment_to_loginFragment);
+                    navController.navigate(R.id.action_splashScreenFragment_to_homeFragment);
                 }else{
-                    navController.navigate(R.id.action_splashScreenFragment_to_signUpFragment2);
+                    navController.navigate(R.id.action_splashScreenFragment_to_loginFragment);
                 }
             }
-        }, 3000);
+        }, 1000);
     }
 }
