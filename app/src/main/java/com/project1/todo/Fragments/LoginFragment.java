@@ -1,17 +1,16 @@
 package com.project1.todo.Fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -63,12 +62,12 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(getContext(), "YOU Logged in Successfully /n Congrajulation", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "YOU Logged in Successfully Congrajulation", Toast.LENGTH_SHORT).show();
                                 navController.navigate(R.id.action_loginFragment_to_homeFragment2);
 
 
                             }else{
-                                Toast.makeText(getContext(), "User Credentails are not valid /n Plss Try again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "User Credentails are not valid "+" Plss Try again", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -81,5 +80,8 @@ public class LoginFragment extends Fragment {
             }
         });
 
+
+
     }
+
 }

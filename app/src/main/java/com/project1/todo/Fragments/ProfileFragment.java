@@ -97,8 +97,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String urlImage = snapshot.child("profilePic").getValue(String.class);
+                if(urlImage==null){
+                    binding.Profilepic.setImageResource(R.drawable.ic_baseline_person_24);
+                }else{
                 Picasso.get().load(urlImage).into(binding.Profilepic);
               //  Log.d("TAG", "onDataChange: "+urlImage);
+            }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

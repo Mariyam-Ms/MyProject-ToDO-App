@@ -10,7 +10,7 @@
         android:id="@+id/navydesignh"
         android:layout_width="wrap_content"
         android:layout_height="180dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@drawable/design_one"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

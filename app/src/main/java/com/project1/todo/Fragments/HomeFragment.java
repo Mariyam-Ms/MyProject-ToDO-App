@@ -1,6 +1,12 @@
 package com.project1.todo.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,13 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +34,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment implements PopupDialogFragment.DailogListner , TODOAdapter.TaskClickedListeners{
@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding=FragmentHomeBinding.inflate(inflater,container,false);
+        binding= FragmentHomeBinding.inflate(inflater,container,false);
         return binding.getRoot();
     }
 
@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
         tododatalist = new ArrayList<>();
         auth = FirebaseAuth.getInstance();
         navController = Navigation.findNavController(view);
-        databaseReference= FirebaseDatabase.getInstance().getReference().child("").child(auth.getCurrentUser().getUid());
+        databaseReference= FirebaseDatabase.getInstance().getReference();
         storageReference = FirebaseStorage.getInstance().getReference("Images");
         getProfilePic();
         binding.Notes.setHasFixedSize(true);
@@ -75,34 +75,46 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
         getTaskfromRDb();
 
 
+
+
+
         binding.profileinHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.action_homeFragment_to_profileFragment2);
 
-            }});
+            }
+        });
 
         binding.addtask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (popup != null){
                     getChildFragmentManager().beginTransaction().remove(popup).commit();
-                }else {
+                }
                     popup = new PopupDialogFragment(HomeFragment.this);
                     popup.show(getChildFragmentManager(), PopupDialogFragment.TAG);
-                }
+
             }
         });
 
     }
 
+
+
+
     private void getProfilePic() {
-        databaseReference.child("users").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("users").child(Objects.requireNonNull(auth.getCurrentUser()).getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String urlImage = snapshot.child("profilePic").getValue(String.class);
-                Picasso.get().load(urlImage).into(binding.profileinHome);
-              //  Log.d("TAG", "onDataChange: "+urlImage);
+
+                if (urlImage == null) {
+                    binding.profileinHome.setImageResource(R.drawable.ic_baseline_person_24);
+                } else {
+                    Picasso.get().load(urlImage).into(binding.profileinHome);
+                }
+                //  Log.d("TAG", "onDataChange: "+urlImage);
             }
 
             @Override
@@ -115,20 +127,23 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
 
 
     private void getTaskfromRDb() {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.child("tasks").
+        child(Objects.requireNonNull(auth.getCurrentUser()).getUid()).
+        addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 tododatalist.clear();
 
                 for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
-                    DataClass todotask = new DataClass ();
+                    DataClass todotask = new DataClass();
                     todotask.setTodo(taskSnapshot.getValue(String.class));
+                    Log.d(TAG, "onDataChange: "+todotask);
                     todotask.setTaskid(taskSnapshot.getKey());
 
                     tododatalist.add(todotask);
                 }
-                Log.d(TAG, "onDataChange: "+tododatalist);
+                Log.d(TAG, "onDataChange: " + tododatalist);
                 todoAdapter.setTodolist(tododatalist);
                 binding.Notes.setAdapter(todoAdapter);
                 todoAdapter.notifyDataSetChanged();
@@ -145,7 +160,7 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
     @Override
     public void addTasktoRDb(String task, EditText edittext) {
 
-        databaseReference.push().setValue(task).addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseReference.child("tasks").child(Objects.requireNonNull(auth.getCurrentUser()).getUid()).push().setValue(task).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -164,7 +179,7 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
         updateMap.put(taskid , task);
 
 
-        databaseReference.updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseReference.child("tasks").child(Objects.requireNonNull(auth.getCurrentUser()).getUid()).updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
@@ -197,14 +212,14 @@ public class HomeFragment extends Fragment implements PopupDialogFragment.Dailog
     @Override
     public void Deletetask(DataClass todotask) {
 
-        databaseReference.child(todotask.getTaskid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseReference.child("tasks").child(Objects.requireNonNull(auth.getCurrentUser()).getUid()).child(todotask.getTaskid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
 
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), " Task Deleted ", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -94,31 +94,34 @@
 
 
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/passwordlimage"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_marginStart="300dp"
-            android:layout_marginEnd="5dp"
-            android:background="@null"
-            android:paddingStart="12dp"
-            android:src="@drawable/ic_baseline_remove_red_eye_24"
-            app:layout_constraintTop_toBottomOf="@id/emaill" />
 
 
-        <com.google.android.material.textfield.TextInputLayout
+       <com.google.android.material.textfield.TextInputLayout
 
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            app:passwordToggleEnabled="true" />
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+           app:passwordToggleTint="@color/primary_color"
+           android:paddingStart="5dp"
+           android:paddingBottom="-33dp"
+           android:layout_marginTop="-4dp"
+           android:layout_marginBottom="-2dp"
+           android:hint="password"
+
+
+           >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordl"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:hint="Enter Password"
-            android:layout_marginStart="5dp"
+            android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:background="@null" />
+            android:backgroundTint="@color/white"
+            android:background="@null"
+           />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
     </androidx.cardview.widget.CardView>
