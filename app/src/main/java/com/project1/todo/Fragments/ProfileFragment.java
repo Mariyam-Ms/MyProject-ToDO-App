@@ -2,17 +2,17 @@ package com.project1.todo.Fragments;
 
 import static com.project1.todo.Fragments.HomeFragment.TAG;
 
-import android.content.Intent;
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.project1.todo.R;
 import com.project1.todo.databinding.FragmentProfileBinding;
+import com.project1.todo.utilsRecycle.DataClass;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -48,17 +49,15 @@ public class ProfileFragment extends Fragment {
     private NavController navController;
     private DatabaseReference databaseReference;
     //private static final int GALLERY_REQUEST_Code = 11;
-   private StorageReference storageReference;
-   //Uri ImageUri;
-
-
+    private StorageReference storageReference;
+    //Uri ImageUri;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding=FragmentProfileBinding.inflate(inflater,container,false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -66,8 +65,8 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         auth = FirebaseAuth.getInstance();
-        navController= Navigation.findNavController(view);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(auth.getCurrentUser().getUid());
+        navController = Navigation.findNavController(view);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(Objects.requireNonNull(auth.getCurrentUser()).getUid());
         storageReference = FirebaseStorage.getInstance().getReference("Images");
         getProfilePic();
         binding.logout.setOnClickListener(new View.OnClickListener() {
@@ -78,63 +77,84 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        //What is object require no null
         binding.emailuser.setText(Objects.requireNonNull(auth.getCurrentUser()).getEmail());
 
         binding.editProfilepic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               mGetContent.launch("image/*");
+                mGetContent.launch("image/*");
                 Log.d(TAG, "onClick: ");
             }
         });
     }
 
 
-    public  void getProfilePic(){
 
+
+    private void getProfilePic() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String urlImage = snapshot.child("profilePic").getValue(String.class);
-                if(urlImage==null){
+
+                String urlImage = null;
+                for (DataSnapshot profileSnapshot : snapshot.getChildren()) {
+                    String pushKey = profileSnapshot.getKey();
+                    if (pushKey != null)
+                        urlImage = snapshot.child(pushKey).child("imageUrl").getValue(String.class);
+                }
+
+
+                //  Log.d("TAG", "onDataChange: "+urlImage);
+                if (urlImage == null) {
                     binding.Profilepic.setImageResource(R.drawable.ic_baseline_person_24);
-                }else{
-                Picasso.get().load(urlImage).into(binding.Profilepic);
-              //  Log.d("TAG", "onDataChange: "+urlImage);
+                } else {
+                    Picasso.get().load(urlImage).into(binding.Profilepic);
+                }
+
             }
-            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Please Check Internet /n connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "There is Trouble in retriving", Toast.LENGTH_SHORT).show();
 
             }
         });
+      ;
     }
 
 
     private void uploadImage(Uri uri) {
-        storageReference=FirebaseStorage.getInstance().getReference("images");
         binding.profileProgressBar.setVisibility(View.VISIBLE);
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        StorageReference filereff = storageReference.child(System.currentTimeMillis() + "." +getFileExtention(uri));
+        filereff.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+                filereff.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        databaseReference.child("profilePic").setValue(uri.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                                binding.profileProgressBar.setVisibility(View.INVISIBLE);
-                            }
+                        binding.profileProgressBar.setVisibility(View.INVISIBLE);
+
+                        DataClass dataClass = new DataClass(uri.toString());
+                        String imageUrl = databaseReference.push().getKey();
+                        databaseReference.child(imageUrl).setValue(dataClass)
 
 
-                        });
+                                // databaseReference.child("profilePic").setValue(uri.toString()).
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            binding.profileProgressBar.setVisibility(View.VISIBLE);
+                                        }
+
+                                    }
+
+
+                                });
 
 
                     }
@@ -150,7 +170,21 @@ public class ProfileFragment extends Fragment {
 
 
         });
-}
+
+    }
+
+
+
+
+
+
+    private String getFileExtention(Uri muri){
+        ContentResolver cr= requireContext().getContentResolver();
+        MimeTypeMap mime=MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(muri));
+
+
+    }
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
@@ -159,5 +193,8 @@ public class ProfileFragment extends Fragment {
                     uploadImage(uri);
                 }
             });
+
+
 }
+
 

@@ -56,7 +56,12 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.TODOViewholder
 
     @Override
     public int getItemCount() {
-        return todolist.size();
+        if(todolist==null){
+            return 0;
+
+        }else {
+            return todolist.size();
+        }
     }
     public class TODOViewholder extends RecyclerView.ViewHolder{
 
